@@ -1,0 +1,1324 @@
+{
+    "name": "Speech to text",
+    "flow": [
+        {
+            "id": 1,
+            "module": "telegram:WatchUpdates",
+            "version": 1,
+            "parameters": {
+                "__IMTHOOK__": 1001764
+            },
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": 0,
+                    "y": 300
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTHOOK__": {
+                            "data": {
+                                "editable": "false"
+                            },
+                            "label": "esp_speech_to_text_bot"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTHOOK__",
+                        "type": "hook:telegramapi",
+                        "label": "Webhook",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 2,
+            "module": "builtin:BasicRouter",
+            "version": 1,
+            "parameters": {
+                "else": 1
+            },
+            "mapper": null,
+            "metadata": {
+                "designer": {
+                    "x": 300,
+                    "y": 300
+                }
+            },
+            "routes": [
+                {
+                    "flow": [
+                        {
+                            "id": 4,
+                            "module": "telegram:SendReplyMessage",
+                            "version": 1,
+                            "parameters": {
+                                "__IMTCONN__": 3059438
+                            },
+                            "filter": {
+                                "name": "Voice YES",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{1.message.attachment.type}}",
+                                            "b": "Voice",
+                                            "o": "text:equal"
+                                        }
+                                    ],
+                                    [
+                                        {
+                                            "a": "{{1.message.attachment.type}}",
+                                            "b": "Audio",
+                                            "o": "text:equal"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "text": "Gracias por el Audio.\nVoy a procesarlo y ahora te envio el texto transcrito.",
+                                "chatId": "{{1.message.chat.id}}",
+                                "parseMode": "",
+                                "replyMarkup": "",
+                                "messageThreadId": "",
+                                "replyToMessageId": "",
+                                "replyMarkupAssembleType": "reply_markup_enter"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 600,
+                                    "y": 150
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "parseMode": {
+                                            "label": "Empty"
+                                        },
+                                        "disableNotification": {
+                                            "mode": "chose"
+                                        },
+                                        "replyMarkupAssembleType": {
+                                            "label": "Enter the Reply Markup"
+                                        }
+                                    },
+                                    "parameters": {
+                                        "__IMTCONN__": {
+                                            "data": {
+                                                "scoped": "true",
+                                                "connection": "telegram"
+                                            },
+                                            "label": "esp_speech_to_text_bot"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account:telegram",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "chatId",
+                                        "type": "text",
+                                        "label": "Chat ID",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "text",
+                                        "type": "text",
+                                        "label": "Text",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "messageThreadId",
+                                        "type": "number",
+                                        "label": "Message Thread ID"
+                                    },
+                                    {
+                                        "name": "parseMode",
+                                        "type": "select",
+                                        "label": "Parse Mode",
+                                        "validate": {
+                                            "enum": [
+                                                "Markdown",
+                                                "HTML"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "disableNotification",
+                                        "type": "boolean",
+                                        "label": "Disable Notifications"
+                                    },
+                                    {
+                                        "name": "disableWebPagePreview",
+                                        "type": "boolean",
+                                        "label": "Disable Link Previews"
+                                    },
+                                    {
+                                        "name": "replyToMessageId",
+                                        "type": "number",
+                                        "label": "Original Message ID"
+                                    },
+                                    {
+                                        "name": "replyMarkupAssembleType",
+                                        "type": "select",
+                                        "label": "Enter/Assemble the Reply Markup Field",
+                                        "validate": {
+                                            "enum": [
+                                                "reply_markup_enter",
+                                                "reply_markup_assemble"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "replyMarkup",
+                                        "type": "text",
+                                        "label": "Reply Markup"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 11,
+                            "module": "telegram:DownloadFile",
+                            "version": 1,
+                            "parameters": {
+                                "__IMTCONN__": 3059438
+                            },
+                            "mapper": {
+                                "fileId": "{{1.message.attachment.file_id}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 900,
+                                    "y": 150
+                                },
+                                "restore": {
+                                    "parameters": {
+                                        "__IMTCONN__": {
+                                            "data": {
+                                                "scoped": "true",
+                                                "connection": "telegram"
+                                            },
+                                            "label": "esp_speech_to_text_bot"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account:telegram",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "fileId",
+                                        "type": "text",
+                                        "label": "File ID",
+                                        "required": true
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 5,
+                            "module": "openai-gpt-3:CreateTranscription",
+                            "version": 1,
+                            "parameters": {
+                                "__IMTCONN__": 3059539
+                            },
+                            "mapper": {
+                                "model": "whisper-1",
+                                "fileData": "{{11.fileOutput}}",
+                                "fileName": "{{11.fileName}}",
+                                "temperature": "1",
+                                "response_format": "json"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1200,
+                                    "y": 150
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "model": {
+                                            "mode": "chose",
+                                            "label": "Whisper-1"
+                                        },
+                                        "response_format": {
+                                            "mode": "chose",
+                                            "label": "JSON"
+                                        }
+                                    },
+                                    "parameters": {
+                                        "__IMTCONN__": {
+                                            "data": {
+                                                "scoped": "true",
+                                                "connection": "openai-gpt-3"
+                                            },
+                                            "label": "Whats to text"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account:openai-gpt-3",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "fileName",
+                                        "type": "filename",
+                                        "label": "File Name",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "fileData",
+                                        "type": "buffer",
+                                        "label": "File Data",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "model",
+                                        "type": "select",
+                                        "label": "Model",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "prompt",
+                                        "type": "text",
+                                        "label": "Prompt"
+                                    },
+                                    {
+                                        "name": "response_format",
+                                        "type": "select",
+                                        "label": "Response Format",
+                                        "validate": {
+                                            "enum": [
+                                                "json",
+                                                "text",
+                                                "srt",
+                                                "verbose_json",
+                                                "vtt"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "temperature",
+                                        "type": "number",
+                                        "label": "Temperature",
+                                        "validate": {
+                                            "max": 1,
+                                            "min": 0
+                                        }
+                                    },
+                                    {
+                                        "name": "language",
+                                        "type": "text",
+                                        "label": "Language"
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "text",
+                                        "type": "text",
+                                        "label": "Text"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 13,
+                            "module": "openai-gpt-3:CreateCompletion",
+                            "version": 1,
+                            "parameters": {
+                                "__IMTCONN__": 3059539
+                            },
+                            "mapper": {
+                                "select": "chat",
+                                "max_tokens": "500",
+                                "temperature": "1",
+                                "top_p": "1",
+                                "n_completions": "1",
+                                "response_format": "text",
+                                "model": "gpt-4o-mini-2024-07-18",
+                                "messages": [
+                                    {
+                                        "role": "user",
+                                        "content": "Eres un asistente que ayuda a dar formato a texto. Tu tarea es dividir el siguiente texto en párrafos o líneas, manteniendo la coherencia del mensaje y asegurando que cada fragmento tenga sentido. \n\nTexto a formatear: \n{{5.text}}\n\nDevuelve únicamente el texto formateado, sin explicaciones ni cabeceras.\n"
+                                    }
+                                ]
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1500,
+                                    "y": 150
+                                },
+                                "restore": {
+                                    "parameters": {
+                                        "__IMTCONN__": {
+                                            "label": "Whats to text",
+                                            "data": {
+                                                "scoped": "true",
+                                                "connection": "openai-gpt-3"
+                                            }
+                                        }
+                                    },
+                                    "expect": {
+                                        "select": {
+                                            "label": "Create a Chat Completion (GPT Models)"
+                                        },
+                                        "logit_bias": {
+                                            "mode": "chose"
+                                        },
+                                        "response_format": {
+                                            "mode": "chose",
+                                            "label": "Text"
+                                        },
+                                        "stop": {
+                                            "mode": "chose"
+                                        },
+                                        "additionalParameters": {
+                                            "mode": "chose"
+                                        },
+                                        "model": {
+                                            "mode": "chose",
+                                            "label": "gpt-4o-mini-2024-07-18 (system)"
+                                        },
+                                        "messages": {
+                                            "mode": "chose",
+                                            "items": [
+                                                {
+                                                    "role": {
+                                                        "mode": "chose",
+                                                        "label": "User"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account:openai-gpt-3",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "select",
+                                        "type": "select",
+                                        "label": "Select Method",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "chat",
+                                                "prompt"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "max_tokens",
+                                        "type": "number",
+                                        "label": "Max Tokens",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "temperature",
+                                        "type": "number",
+                                        "label": "Temperature",
+                                        "validate": {
+                                            "max": 2,
+                                            "min": 0
+                                        }
+                                    },
+                                    {
+                                        "name": "top_p",
+                                        "type": "number",
+                                        "label": "Top P",
+                                        "validate": {
+                                            "max": 1,
+                                            "min": 0
+                                        }
+                                    },
+                                    {
+                                        "name": "n_completions",
+                                        "type": "number",
+                                        "label": "Number"
+                                    },
+                                    {
+                                        "name": "frequency_penalty",
+                                        "type": "number",
+                                        "label": "Frequency Penalty",
+                                        "validate": {
+                                            "max": 2,
+                                            "min": -2
+                                        }
+                                    },
+                                    {
+                                        "name": "presence_penalty",
+                                        "type": "number",
+                                        "label": "Presence Penalty",
+                                        "validate": {
+                                            "max": 2,
+                                            "min": -2
+                                        }
+                                    },
+                                    {
+                                        "name": "logit_bias",
+                                        "type": "array",
+                                        "label": "Token Probability",
+                                        "spec": {
+                                            "spec": [
+                                                {
+                                                    "name": "token",
+                                                    "type": "text",
+                                                    "label": "Token ID",
+                                                    "required": true
+                                                },
+                                                {
+                                                    "name": "probability",
+                                                    "type": "number",
+                                                    "label": "Probability",
+                                                    "required": true,
+                                                    "validate": {
+                                                        "max": 100,
+                                                        "min": -100
+                                                    }
+                                                }
+                                            ],
+                                            "type": "collection",
+                                            "label": "Token Probability",
+                                            "name": "value"
+                                        }
+                                    },
+                                    {
+                                        "name": "response_format",
+                                        "type": "select",
+                                        "label": "Response Format",
+                                        "validate": {
+                                            "enum": [
+                                                "text",
+                                                "json_object"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "seed",
+                                        "type": "integer",
+                                        "label": "Seed"
+                                    },
+                                    {
+                                        "name": "stop",
+                                        "type": "array",
+                                        "label": "Stop Sequences",
+                                        "validate": {
+                                            "maxItems": 4
+                                        },
+                                        "spec": {
+                                            "type": "text",
+                                            "label": "Stop Sequence",
+                                            "name": "value"
+                                        }
+                                    },
+                                    {
+                                        "name": "additionalParameters",
+                                        "type": "array",
+                                        "label": "Other Input Parameters",
+                                        "spec": {
+                                            "spec": [
+                                                {
+                                                    "name": "key",
+                                                    "type": "text",
+                                                    "label": "Parameter Name",
+                                                    "required": true
+                                                },
+                                                {
+                                                    "name": "type",
+                                                    "type": "select",
+                                                    "label": "Input Type",
+                                                    "options": [
+                                                        {
+                                                            "label": "Text",
+                                                            "value": "text",
+                                                            "nested": [
+                                                                {
+                                                                    "name": "value",
+                                                                    "type": "text",
+                                                                    "label": "Parameter Value"
+                                                                }
+                                                            ],
+                                                            "default": true
+                                                        },
+                                                        {
+                                                            "label": "Number",
+                                                            "value": "number",
+                                                            "nested": [
+                                                                {
+                                                                    "name": "value",
+                                                                    "type": "number",
+                                                                    "label": "Parameter Value"
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "label": "Boolean",
+                                                            "value": "boolean",
+                                                            "nested": [
+                                                                {
+                                                                    "name": "value",
+                                                                    "type": "boolean",
+                                                                    "label": "Parameter Value"
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "label": "Date",
+                                                            "value": "date",
+                                                            "nested": [
+                                                                {
+                                                                    "name": "value",
+                                                                    "type": "date",
+                                                                    "label": "Parameter Value"
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "label": "Any",
+                                                            "value": "any",
+                                                            "nested": [
+                                                                {
+                                                                    "name": "value",
+                                                                    "type": "any",
+                                                                    "label": "Parameter Value"
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ],
+                                            "type": "collection",
+                                            "label": "Input Parameter",
+                                            "name": "value"
+                                        }
+                                    },
+                                    {
+                                        "name": "model",
+                                        "type": "select",
+                                        "label": "Model",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "messages",
+                                        "type": "array",
+                                        "label": "Messages",
+                                        "required": true,
+                                        "spec": {
+                                            "spec": [
+                                                {
+                                                    "name": "role",
+                                                    "type": "select",
+                                                    "label": "Role",
+                                                    "options": [
+                                                        {
+                                                            "label": "System",
+                                                            "value": "system"
+                                                        },
+                                                        {
+                                                            "label": "User",
+                                                            "value": "user"
+                                                        },
+                                                        {
+                                                            "label": "Assistant",
+                                                            "value": "assistant"
+                                                        }
+                                                    ],
+                                                    "required": true
+                                                },
+                                                {
+                                                    "name": "content",
+                                                    "type": "text",
+                                                    "label": "Message Content"
+                                                }
+                                            ],
+                                            "type": "collection",
+                                            "label": "Message",
+                                            "name": "value"
+                                        }
+                                    }
+                                ],
+                                "advanced": true
+                            }
+                        },
+                        {
+                            "id": 14,
+                            "module": "builtin:BasicRouter",
+                            "version": 1,
+                            "mapper": null,
+                            "metadata": {
+                                "designer": {
+                                    "x": 1800,
+                                    "y": 150
+                                }
+                            },
+                            "routes": [
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 12,
+                                            "module": "telegram:SendReplyMessage",
+                                            "version": 1,
+                                            "parameters": {
+                                                "__IMTCONN__": 3059438
+                                            },
+                                            "mapper": {
+                                                "chatId": "{{1.message.chat.id}}",
+                                                "text": "Mensaje sin formatear:",
+                                                "messageThreadId": "",
+                                                "parseMode": "",
+                                                "replyToMessageId": "",
+                                                "replyMarkupAssembleType": "reply_markup_enter",
+                                                "replyMarkup": ""
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 2100,
+                                                    "y": 0
+                                                },
+                                                "restore": {
+                                                    "parameters": {
+                                                        "__IMTCONN__": {
+                                                            "label": "esp_speech_to_text_bot",
+                                                            "data": {
+                                                                "scoped": "true",
+                                                                "connection": "telegram"
+                                                            }
+                                                        }
+                                                    },
+                                                    "expect": {
+                                                        "parseMode": {
+                                                            "label": "Empty"
+                                                        },
+                                                        "disableNotification": {
+                                                            "mode": "chose"
+                                                        },
+                                                        "replyMarkupAssembleType": {
+                                                            "label": "Enter the Reply Markup"
+                                                        }
+                                                    }
+                                                },
+                                                "parameters": [
+                                                    {
+                                                        "name": "__IMTCONN__",
+                                                        "type": "account:telegram",
+                                                        "label": "Connection",
+                                                        "required": true
+                                                    }
+                                                ],
+                                                "expect": [
+                                                    {
+                                                        "name": "chatId",
+                                                        "type": "text",
+                                                        "label": "Chat ID",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "text",
+                                                        "type": "text",
+                                                        "label": "Text",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "messageThreadId",
+                                                        "type": "number",
+                                                        "label": "Message Thread ID"
+                                                    },
+                                                    {
+                                                        "name": "parseMode",
+                                                        "type": "select",
+                                                        "label": "Parse Mode",
+                                                        "validate": {
+                                                            "enum": [
+                                                                "Markdown",
+                                                                "HTML"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "disableNotification",
+                                                        "type": "boolean",
+                                                        "label": "Disable Notifications"
+                                                    },
+                                                    {
+                                                        "name": "disableWebPagePreview",
+                                                        "type": "boolean",
+                                                        "label": "Disable Link Previews"
+                                                    },
+                                                    {
+                                                        "name": "replyToMessageId",
+                                                        "type": "number",
+                                                        "label": "Original Message ID"
+                                                    },
+                                                    {
+                                                        "name": "replyMarkupAssembleType",
+                                                        "type": "select",
+                                                        "label": "Enter/Assemble the Reply Markup Field",
+                                                        "validate": {
+                                                            "enum": [
+                                                                "reply_markup_enter",
+                                                                "reply_markup_assemble"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "replyMarkup",
+                                                        "type": "text",
+                                                        "label": "Reply Markup"
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "id": 16,
+                                            "module": "telegram:SendReplyMessage",
+                                            "version": 1,
+                                            "parameters": {
+                                                "__IMTCONN__": 3059438
+                                            },
+                                            "mapper": {
+                                                "chatId": "{{1.message.chat.id}}",
+                                                "text": "{{5.text}}",
+                                                "messageThreadId": "",
+                                                "parseMode": "",
+                                                "replyToMessageId": "",
+                                                "replyMarkupAssembleType": "reply_markup_enter",
+                                                "replyMarkup": ""
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 2400,
+                                                    "y": 0
+                                                },
+                                                "restore": {
+                                                    "parameters": {
+                                                        "__IMTCONN__": {
+                                                            "label": "esp_speech_to_text_bot",
+                                                            "data": {
+                                                                "scoped": "true",
+                                                                "connection": "telegram"
+                                                            }
+                                                        }
+                                                    },
+                                                    "expect": {
+                                                        "parseMode": {
+                                                            "label": "Empty"
+                                                        },
+                                                        "disableNotification": {
+                                                            "mode": "chose"
+                                                        },
+                                                        "replyMarkupAssembleType": {
+                                                            "label": "Enter the Reply Markup"
+                                                        }
+                                                    }
+                                                },
+                                                "parameters": [
+                                                    {
+                                                        "name": "__IMTCONN__",
+                                                        "type": "account:telegram",
+                                                        "label": "Connection",
+                                                        "required": true
+                                                    }
+                                                ],
+                                                "expect": [
+                                                    {
+                                                        "name": "chatId",
+                                                        "type": "text",
+                                                        "label": "Chat ID",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "text",
+                                                        "type": "text",
+                                                        "label": "Text",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "messageThreadId",
+                                                        "type": "number",
+                                                        "label": "Message Thread ID"
+                                                    },
+                                                    {
+                                                        "name": "parseMode",
+                                                        "type": "select",
+                                                        "label": "Parse Mode",
+                                                        "validate": {
+                                                            "enum": [
+                                                                "Markdown",
+                                                                "HTML"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "disableNotification",
+                                                        "type": "boolean",
+                                                        "label": "Disable Notifications"
+                                                    },
+                                                    {
+                                                        "name": "disableWebPagePreview",
+                                                        "type": "boolean",
+                                                        "label": "Disable Link Previews"
+                                                    },
+                                                    {
+                                                        "name": "replyToMessageId",
+                                                        "type": "number",
+                                                        "label": "Original Message ID"
+                                                    },
+                                                    {
+                                                        "name": "replyMarkupAssembleType",
+                                                        "type": "select",
+                                                        "label": "Enter/Assemble the Reply Markup Field",
+                                                        "validate": {
+                                                            "enum": [
+                                                                "reply_markup_enter",
+                                                                "reply_markup_assemble"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "replyMarkup",
+                                                        "type": "text",
+                                                        "label": "Reply Markup"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 15,
+                                            "module": "telegram:SendReplyMessage",
+                                            "version": 1,
+                                            "parameters": {
+                                                "__IMTCONN__": 3059438
+                                            },
+                                            "mapper": {
+                                                "chatId": "{{1.message.chat.id}}",
+                                                "text": "Mensaje Formateado:",
+                                                "messageThreadId": "",
+                                                "parseMode": "",
+                                                "replyToMessageId": "",
+                                                "replyMarkupAssembleType": "reply_markup_enter",
+                                                "replyMarkup": ""
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 2100,
+                                                    "y": 300
+                                                },
+                                                "restore": {
+                                                    "parameters": {
+                                                        "__IMTCONN__": {
+                                                            "label": "esp_speech_to_text_bot",
+                                                            "data": {
+                                                                "scoped": "true",
+                                                                "connection": "telegram"
+                                                            }
+                                                        }
+                                                    },
+                                                    "expect": {
+                                                        "parseMode": {
+                                                            "label": "Empty"
+                                                        },
+                                                        "disableNotification": {
+                                                            "mode": "chose"
+                                                        },
+                                                        "replyMarkupAssembleType": {
+                                                            "label": "Enter the Reply Markup"
+                                                        }
+                                                    }
+                                                },
+                                                "parameters": [
+                                                    {
+                                                        "name": "__IMTCONN__",
+                                                        "type": "account:telegram",
+                                                        "label": "Connection",
+                                                        "required": true
+                                                    }
+                                                ],
+                                                "expect": [
+                                                    {
+                                                        "name": "chatId",
+                                                        "type": "text",
+                                                        "label": "Chat ID",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "text",
+                                                        "type": "text",
+                                                        "label": "Text",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "messageThreadId",
+                                                        "type": "number",
+                                                        "label": "Message Thread ID"
+                                                    },
+                                                    {
+                                                        "name": "parseMode",
+                                                        "type": "select",
+                                                        "label": "Parse Mode",
+                                                        "validate": {
+                                                            "enum": [
+                                                                "Markdown",
+                                                                "HTML"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "disableNotification",
+                                                        "type": "boolean",
+                                                        "label": "Disable Notifications"
+                                                    },
+                                                    {
+                                                        "name": "disableWebPagePreview",
+                                                        "type": "boolean",
+                                                        "label": "Disable Link Previews"
+                                                    },
+                                                    {
+                                                        "name": "replyToMessageId",
+                                                        "type": "number",
+                                                        "label": "Original Message ID"
+                                                    },
+                                                    {
+                                                        "name": "replyMarkupAssembleType",
+                                                        "type": "select",
+                                                        "label": "Enter/Assemble the Reply Markup Field",
+                                                        "validate": {
+                                                            "enum": [
+                                                                "reply_markup_enter",
+                                                                "reply_markup_assemble"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "replyMarkup",
+                                                        "type": "text",
+                                                        "label": "Reply Markup"
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "id": 17,
+                                            "module": "telegram:SendReplyMessage",
+                                            "version": 1,
+                                            "parameters": {
+                                                "__IMTCONN__": 3059438
+                                            },
+                                            "mapper": {
+                                                "chatId": "{{1.message.chat.id}}",
+                                                "text": "{{13.result}}",
+                                                "messageThreadId": "",
+                                                "parseMode": "",
+                                                "replyToMessageId": "",
+                                                "replyMarkupAssembleType": "reply_markup_enter",
+                                                "replyMarkup": ""
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 2400,
+                                                    "y": 300
+                                                },
+                                                "restore": {
+                                                    "parameters": {
+                                                        "__IMTCONN__": {
+                                                            "label": "esp_speech_to_text_bot",
+                                                            "data": {
+                                                                "scoped": "true",
+                                                                "connection": "telegram"
+                                                            }
+                                                        }
+                                                    },
+                                                    "expect": {
+                                                        "parseMode": {
+                                                            "label": "Empty"
+                                                        },
+                                                        "disableNotification": {
+                                                            "mode": "chose"
+                                                        },
+                                                        "replyMarkupAssembleType": {
+                                                            "label": "Enter the Reply Markup"
+                                                        }
+                                                    }
+                                                },
+                                                "parameters": [
+                                                    {
+                                                        "name": "__IMTCONN__",
+                                                        "type": "account:telegram",
+                                                        "label": "Connection",
+                                                        "required": true
+                                                    }
+                                                ],
+                                                "expect": [
+                                                    {
+                                                        "name": "chatId",
+                                                        "type": "text",
+                                                        "label": "Chat ID",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "text",
+                                                        "type": "text",
+                                                        "label": "Text",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "messageThreadId",
+                                                        "type": "number",
+                                                        "label": "Message Thread ID"
+                                                    },
+                                                    {
+                                                        "name": "parseMode",
+                                                        "type": "select",
+                                                        "label": "Parse Mode",
+                                                        "validate": {
+                                                            "enum": [
+                                                                "Markdown",
+                                                                "HTML"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "disableNotification",
+                                                        "type": "boolean",
+                                                        "label": "Disable Notifications"
+                                                    },
+                                                    {
+                                                        "name": "disableWebPagePreview",
+                                                        "type": "boolean",
+                                                        "label": "Disable Link Previews"
+                                                    },
+                                                    {
+                                                        "name": "replyToMessageId",
+                                                        "type": "number",
+                                                        "label": "Original Message ID"
+                                                    },
+                                                    {
+                                                        "name": "replyMarkupAssembleType",
+                                                        "type": "select",
+                                                        "label": "Enter/Assemble the Reply Markup Field",
+                                                        "validate": {
+                                                            "enum": [
+                                                                "reply_markup_enter",
+                                                                "reply_markup_assemble"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "replyMarkup",
+                                                        "type": "text",
+                                                        "label": "Reply Markup"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "flow": [
+                        {
+                            "id": 3,
+                            "module": "telegram:SendReplyMessage",
+                            "version": 1,
+                            "parameters": {
+                                "__IMTCONN__": 3059438
+                            },
+                            "filter": {
+                                "name": "Voice NO",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{1.message.attachment.type}}",
+                                            "b": "Voice",
+                                            "o": "text:notequal"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "text": "Disculpa.\nLo que he recibido no es un Audio que yo pueda transcribir en texto.\n\nInténtalo de nuevo.\nDisculpa las molestias.",
+                                "chatId": "{{1.message.chat.id}}",
+                                "parseMode": "",
+                                "replyMarkup": "",
+                                "messageThreadId": "",
+                                "replyToMessageId": "",
+                                "replyMarkupAssembleType": "reply_markup_enter"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 600,
+                                    "y": 600
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "chatId": {
+                                            "collapsed": true
+                                        },
+                                        "parseMode": {
+                                            "label": "Empty"
+                                        },
+                                        "replyMarkup": {
+                                            "collapsed": true
+                                        },
+                                        "messageThreadId": {
+                                            "collapsed": true
+                                        },
+                                        "replyToMessageId": {
+                                            "collapsed": true
+                                        },
+                                        "disableNotification": {
+                                            "mode": "chose",
+                                            "collapsed": true
+                                        },
+                                        "disableWebPagePreview": {
+                                            "collapsed": true
+                                        },
+                                        "replyMarkupAssembleType": {
+                                            "label": "Enter the Reply Markup",
+                                            "collapsed": true
+                                        }
+                                    },
+                                    "parameters": {
+                                        "__IMTCONN__": {
+                                            "data": {
+                                                "scoped": "true",
+                                                "connection": "telegram"
+                                            },
+                                            "label": "esp_speech_to_text_bot"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account:telegram",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "chatId",
+                                        "type": "text",
+                                        "label": "Chat ID",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "text",
+                                        "type": "text",
+                                        "label": "Text",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "messageThreadId",
+                                        "type": "number",
+                                        "label": "Message Thread ID"
+                                    },
+                                    {
+                                        "name": "parseMode",
+                                        "type": "select",
+                                        "label": "Parse Mode",
+                                        "validate": {
+                                            "enum": [
+                                                "Markdown",
+                                                "HTML"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "disableNotification",
+                                        "type": "boolean",
+                                        "label": "Disable Notifications"
+                                    },
+                                    {
+                                        "name": "disableWebPagePreview",
+                                        "type": "boolean",
+                                        "label": "Disable Link Previews"
+                                    },
+                                    {
+                                        "name": "replyToMessageId",
+                                        "type": "number",
+                                        "label": "Original Message ID"
+                                    },
+                                    {
+                                        "name": "replyMarkupAssembleType",
+                                        "type": "select",
+                                        "label": "Enter/Assemble the Reply Markup Field",
+                                        "validate": {
+                                            "enum": [
+                                                "reply_markup_enter",
+                                                "reply_markup_assemble"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "replyMarkup",
+                                        "type": "text",
+                                        "label": "Reply Markup"
+                                    }
+                                ],
+                                "advanced": true
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "instant": true,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": true,
+            "dataloss": true,
+            "dlq": true,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": [],
+            "notes": [
+                {
+                    "id": 6,
+                    "text": "",
+                    "filter": true
+                }
+            ]
+        },
+        "zone": "eu2.make.com"
+    }
+}
