@@ -1,4 +1,4 @@
-# Telgram BOT para realizar Speech to Text
+# Telegram BOT para realizar Speech to Text
 # Usando make.com
 
 ## Cuenta MAKE
@@ -10,6 +10,14 @@
 | Telegram BOT | Connection Name |
 | --- | --- |
 | @esp_speech_2_text_bot | Telegram Speech To Text BOT |
+
+| Configure BOT WebHook |
+| --- |
+| https://api.telegram.org/bot<BOT_TOKEN>/setWebhook?url=<WEBHOOK_URL> |
+
+| UNConfigure BOT WebHook |
+| --- |
+| https://api.telegram.org/bot<BOT_TOKEN>/setWebhook?url= |
 
 | Conection Name | OpenAI API Key Name | OpenAI Project Name | OpenAI Truncated API KEY |
 | --- | --- | --- | --- |
